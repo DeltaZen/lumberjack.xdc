@@ -1,0 +1,9 @@
+name="LumberJack v1.0"
+
+[store]
+id="com.github.adbenitez.lumberjack"
+version_name=1.0
+version_code=1
+author="adbenitez"
+author_email="adbenitez@nauta.cu"
+description="Chop wood as fast as you can, but watch out for those branches!"
