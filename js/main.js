@@ -68,15 +68,6 @@ let eScoreValue       = ge('score_value')
 , eButtonLeft       = ge('button_left')
 , eButtonRight      = ge('button_right');
 
-let CSSGraphics = {
-    // score_coin:   'images/score_coin.png',
-    right:        'images/right.png',
-    left:         'images/left.png',
-    play:         'images/play.png',
-    refresh:      'images/refresh.png',
-    // row_coin:     'images/row_coin.png'
-};
-
 let Graphics = {
     bg_trees:     'images/bg_trees.svg',
     bg_bottom:    'images/bg_bottom.svg',
@@ -493,10 +484,10 @@ function initSprites() {
     }
 }
 
-let loaded = false, cssLoaded = false, graphicsLoaded = false;
+let loaded = false, graphicsLoaded = false;
 
 function checkLoad() {
-    if (cssLoaded && graphicsLoaded) {
+    if (graphicsLoaded) {
         loaded = true;
         addClass(ePageWrap, 'ready');
         setTimeout(function() {
@@ -504,12 +495,6 @@ function checkLoad() {
         }, 500);
     }
 }
-
-loadImages(CSSGraphics, function() {
-    cssLoaded = true;
-    removeClass(ePageWrap, 'loading');
-    checkLoad();
-});
 
 loadImages(Graphics, function(loadedImgs) {
     graphicsLoaded = true;
