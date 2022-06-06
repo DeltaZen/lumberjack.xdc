@@ -15,7 +15,7 @@
         "images/logo.svg"
     ],
     "mode": "add",
-    "outputEntry": "lumberjack.xdc",
+    "outputEntry": "dist/app.xdc",
     "quiet": false,
     "verbose": false
 }

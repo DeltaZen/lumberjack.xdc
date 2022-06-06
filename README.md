@@ -9,4 +9,5 @@ pnpm i
 pnpm build
 ```
 
-The output is a file with `.xdc` extension in the root of the project.
+A `.xdc` file will be generated in the `dist` folder, then just send it in any chat
+and you should be able to play the game.
