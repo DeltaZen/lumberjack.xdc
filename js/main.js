@@ -5,8 +5,7 @@ import './ion.sound.min.js';
 
 
 const START_TIME = 4250;
-let PLAYERS = {}
-, deadline
+let deadline
 , to
 , greeted = false
 , in_game = false
