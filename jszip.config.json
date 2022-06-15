@@ -11,8 +11,7 @@
     ],
     "force": true,
     "ignoreEntries": [
-        "*.map",
-        "images/logo.svg"
+        "*.map"
     ],
     "mode": "add",
     "outputEntry": "dist/app.xdc",
