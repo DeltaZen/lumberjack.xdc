@@ -20,6 +20,41 @@ let PLAYERS = {}
 , curScore = 0
 , curLevel = 1;
 
+let thover = {
+    obj: null,
+    start: function(e) {
+        if (e.touches && e.touches.length == 1) {
+            thover.end(e);
+            thover.obj = this || null;
+            if (thover.obj) {
+                addClass(thover.obj, 'hover');
+            }
+        }
+    },
+    cancel: function(e) {
+        if (thover.obj) {
+            thover.end(e);
+        }
+    },
+    end: function() {
+        if (thover.obj) {
+            removeClass(thover.obj, 'hover');
+            thover.obj = null;
+            thover.highlight = false;
+        }
+    },
+    check: function(e) {
+        if (!e) return false;
+        do {
+            if (hasClass(e, 'button')) {
+                return e;
+            }
+        }
+        while (e = e.parentNode);
+        return false;
+    }
+};
+
 function ge(id) {
     return "string" == typeof id ? document.getElementById(id) : id;
 }
@@ -61,8 +96,6 @@ function removeEvent(e, ev, a) {
 }
 
 let eScoreValue       = ge('score_value')
-, eTable            = ge('table')
-, eTableWrap        = ge('table_wrap')
 , ePageWrap         = ge('page_wrap')
 , eCanvasWrap       = ge('canvas_wrap')
 , eButtonLeft       = ge('button_left')
@@ -490,9 +523,6 @@ function checkLoad() {
     if (graphicsLoaded) {
         loaded = true;
         addClass(ePageWrap, 'ready');
-        setTimeout(function() {
-            updateTable();
-        }, 500);
     }
 }
 
@@ -751,26 +781,6 @@ function updateProgress() {
     timeline_warn.x = -89 * (1 - procent);
 }
 
-function updateTable() {
-    if (!results_shown || !loaded) return;
-    let table_html = '';
-    let table = getHighscores();
-    for (let i = 0; i < table.length; i++) {
-        let row = table[i];
-        table_html += '<li class="row' + (row.current ? ' you' : '') + '">'
-            +    '<span class="place">' + (i+1) + '.</span>'
-            +    '<span class="score">' + row.score + '</span>'
-            +    '<div class="name">' + row.name + '</div>'
-            +  '</li>';
-    }
-    eTable.innerHTML = table_html;
-    if (table.length > 0) {
-        addClass(eTableWrap, 'opened');
-    } else {
-        removeClass(eTableWrap, 'opened');
-    }
-}
-
 function updateContent() {
     toggleClass(ePageWrap, 'in_greet', !greeted);
     toggleClass(ePageWrap, 'in_game',  !results_shown);
@@ -815,22 +825,7 @@ function showResults() {
     if (!results_shown) {
         results_shown = true;
         g_renderer.render(g_stage);
-        const addr = window.webxdc.selfAddr;
-        if (curScore > getHighscore(addr)) {
-            const name = window.webxdc.selfName;
-            const info = name + " scored " + curScore + " in LumberJack";
-            window.webxdc.sendUpdate(
-                {
-                    payload: {
-                        addr: addr,
-                        name: name,
-                        score: curScore,
-                    },
-                    info: info,
-                },
-                info
-            );
-        }
+        window.highscores.setScore(curScore);
         updateContent();
     }
 }
@@ -887,17 +882,6 @@ function pressBtn(btn) {
     }, 100);
 }
 
-function getHighscores() {
-    return Object.keys(PLAYERS).map((addr) => {
-        return {...PLAYERS[addr], current: addr === window.webxdc.selfAddr};
-    }).sort((a, b) => b.score - a.score);
-}
-
-function getHighscore(addr) {
-    return PLAYERS[addr] ? PLAYERS[addr].score : 0;
-}
-
-
 addEvent(document, 'keydown', function(e) {
     e.preventDefault();
     let key = e.which || e.keyCode;
@@ -919,45 +903,8 @@ addEvent(document, 'keydown', function(e) {
     }
 });
 
-let thover = {
-    obj: null,
-    start: function(e) {
-        if (e.touches && e.touches.length == 1) {
-            thover.end(e);
-            thover.obj = this || null;
-            if (thover.obj) {
-                addClass(thover.obj, 'hover');
-            }
-        }
-    },
-    cancel: function(e) {
-        if (thover.obj) {
-            thover.end(e);
-        }
-    },
-    end: function() {
-        if (thover.obj) {
-            removeClass(thover.obj, 'hover');
-            thover.obj = null;
-            thover.highlight = false;
-        }
-    },
-    check: function(e) {
-        if (!e) return false;
-        do {
-            if (hasClass(e, 'button')) {
-                return e;
-            }
-        }
-        while (e = e.parentNode);
-        return false;
-    }
-};
-
-
-updateScore();
+window.highscores.init("LumberJack", "table");
 updateContent();
-updateTable();
 
 addEvent(document, 'touchmove touchcancel', thover.cancel);
 addEvent(document, 'touchend', thover.end);
@@ -974,15 +921,3 @@ addEvent(window, 'resize orientationchange', function() {
 if (!('ontouchstart' in document)) {
     addClass(document.body, '_hover');
 }
-
-
-window.webxdc.setUpdateListener((update) => {
-    const player = update.payload;
-    if (player.score > getHighscore(player.addr)) {
-        PLAYERS[player.addr] = { name: player.name, score: player.score };
-    }
-    if (update.serial === update.max_serial && !in_game) {
-        updateTable();
-    }
-}, 0);
-

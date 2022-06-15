@@ -266,35 +266,34 @@ body {
  margin:0;
  padding:0;
  text-align:left;
- list-style:none
 }
-.table .row {
+.table .score-row {
  margin:0;
  padding:4px 15px 5px;
  font-size:17px
 }
-.table .row.you {
+.table .score-row.you {
  background:#fff;
  border-radius:15px
 }
-.table .place {
+.table .row-pos {
  float:left;
  min-width:14px;
  padding-right:10px;
  color:#88a0a6
 }
-.table .name {
+.table .row-name {
  white-space:nowrap;
  text-overflow:ellipsis;
  overflow:hidden
 }
-.table .score {
+.table .row-score {
  float:right;
  text-align:right;
  min-width:50px;
  padding-left:10px
 }
-.table .score:after {
+.table .row-score:after {
  content:'';
  display:inline-block;
  background:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjVweCIgaGVpZ2h0PSIyNXB4IiB2aWV3Qm94PSIwIDAgMjUgMjUiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PGcgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+PGNpcmNsZSBmaWxsPSIjRTRCMDcyIiBjeD0iMTIuNSIgY3k9IjEyLjUiIHI9IjEyLjUiPjwvY2lyY2xlPjxjaXJjbGUgZmlsbD0iI0YyQzM4QyIgY3g9IjEyLjUiIGN5PSIxMi41IiByPSI5LjUiPjwvY2lyY2xlPjwvZz48L3N2Zz4=) right no-repeat;
